@@ -1,51 +1,54 @@
 package com.example.galleryapp
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.GridLayout
+import android.util.Log
+import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.item_images.*
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Call
 
 class MainActivity : AppCompatActivity() {
 
-    private var imageAdapter = ImagesAdapter()
-    private var dataList = mutableListOf<Images>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        changeActivity()
-        recyclerViewImages()
+        loadPhotos()
 
     }
 
-    private fun recyclerViewImages() {
+    private fun loadPhotos() {
+        //initiate the service
+        val destinationService  = ServiceBuilder.buildService(ApiService::class.java)
+        val requestCall = destinationService.getPhotoList("Paisagem", 1)
+        //make network call asynchronously
+        requestCall.enqueue(object : Callback<SearchPhotosResponse>{
 
-        dataList = mutableListOf(
-            Images("1","75","150",R.drawable.car),
-            Images("2","75","150",R.drawable.car),
-            Images("3","75","150",R.drawable.car),
-            Images("4","75","150",R.drawable.car)
-        )
+            override fun onResponse(call: Call<SearchPhotosResponse>, response: Response<SearchPhotosResponse>) {
+                Log.d("Response", "onResponse: ${response.body()}")
+                if (response.isSuccessful){
+                    val photoList  = response.body()!!
+                    Log.d("Response", "photoList size : ${photoList.photosListInfo.photo.size}")
 
-        recycler_view_images.layoutManager = GridLayoutManager(this, 2)
-        recycler_view_images.adapter = imageAdapter
+                    recycler_view_images.apply {
+                        setHasFixedSize(true)
+                        layoutManager = GridLayoutManager(this@MainActivity,2)
+                        adapter = ImagesAdapter(photoList.photosListInfo.photo)
+                    }
 
-        imageAdapter.setDataList(dataList)
+                }else{
+                        Toast.makeText(this@MainActivity, "BENFICA",Toast.LENGTH_LONG).show()
+                }
+            }
+            override fun onFailure(call: Call<SearchPhotosResponse>, t: Throwable) {
+
+                Toast.makeText(this@MainActivity, "Somathin wrong $t", Toast.LENGTH_LONG).show()
+            }
+        })
     }
-
-
-    private fun changeActivity() {
-        recycler_view_images.setOnClickListener {
-            val cardIntent = Intent(this, DetailsActivity::class.java)
-            startActivity(cardIntent)
-        }
-    }
-
-
-
 }

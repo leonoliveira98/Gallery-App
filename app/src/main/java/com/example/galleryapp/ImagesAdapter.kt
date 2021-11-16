@@ -1,27 +1,16 @@
 package com.example.galleryapp
-import android.content.Context
-import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.cardview.widget.CardView
-import androidx.core.content.ContextCompat.startActivity
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView;
 
-class ImagesAdapter : RecyclerView.Adapter<ImagesAdapter.ImagesViewHolder>() {
-
-    // ?????
-    var dataList = emptyList<Images>()
-
-    internal fun setDataList(dataList: List<Images>) {
-        this.dataList = dataList
-    }
-    // ?????
-
+class ImagesAdapter(private val searchPhotosResponseList: List<SearchPhotosResponse.PhotosInfo.Photo>) : RecyclerView.Adapter<ImagesAdapter.ImagesViewHolder>() {
 
     //  total count of items in the list
-    override fun getItemCount() = dataList.size
+    override fun getItemCount() = searchPhotosResponseList.size
 
     // Usually involves inflating a layout from XML and returning the holder
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImagesViewHolder {
@@ -34,18 +23,24 @@ class ImagesAdapter : RecyclerView.Adapter<ImagesAdapter.ImagesViewHolder>() {
     // Involves populating data into the item through holder
     override fun onBindViewHolder(holder: ImagesViewHolder, position: Int) {
 
-        // Get the data model based on position
-        var data = dataList[position]
-
         // Set item views based on your views and data model
-        holder.image.setImageResource(data.url)
+       return holder.bind(searchPhotosResponseList[position])
     }
 
 
     class ImagesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
 
         var image : ImageView = itemView.findViewById(R.id.image_view)
+        var tvView = itemView.findViewById<TextView>(R.id.text_view_car)
 
+
+        fun bind(photo: SearchPhotosResponse.PhotosInfo.Photo) {
+
+            tvView.text = photo.id
+            // Picasso to set image
+            Log.d("PORTO", photo.id)
+
+        }
     }
 
 }
