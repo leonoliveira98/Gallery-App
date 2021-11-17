@@ -20,6 +20,7 @@ data class SearchPhotosResponse(
         data class Photo (
             val farm: Int,
             val id: String,
+
         )
     }
 }

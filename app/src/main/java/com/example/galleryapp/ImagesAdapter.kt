@@ -6,6 +6,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView;
+import com.bumptech.glide.Glide
+import kotlinx.android.synthetic.main.item_images.view.*
 
 class ImagesAdapter(private val searchPhotosResponseList: List<SearchPhotosResponse.PhotosInfo.Photo>) : RecyclerView.Adapter<ImagesAdapter.ImagesViewHolder>() {
 
@@ -37,8 +39,10 @@ class ImagesAdapter(private val searchPhotosResponseList: List<SearchPhotosRespo
         fun bind(photo: SearchPhotosResponse.PhotosInfo.Photo) {
 
             tvView.text = photo.id
-            // Picasso to set image
-            Log.d("PORTO", photo.id)
+            Glide.with(itemView)
+                .load(R.drawable.car)
+                .into(image)
+
 
         }
     }
