@@ -13,7 +13,6 @@ import retrofit2.Call
 
 class MainActivity : AppCompatActivity() {
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -40,6 +39,11 @@ class MainActivity : AppCompatActivity() {
                         layoutManager = GridLayoutManager(this@MainActivity,2)
                         adapter = ImagesAdapter(photoList.photosListInfo.photo)
                     }
+
+                    // DEPOIS DAQUI METER O SEGUDO PEDIDO COM O ID
+
+                    val destinationService2  = ServiceBuilder.buildService(ApiService::class.java)
+                    val requestCall2 = destinationService.getSizesList("51687102815") // Id exemplo
 
                 }else{
                         Toast.makeText(this@MainActivity, "BENFICA",Toast.LENGTH_LONG).show()
