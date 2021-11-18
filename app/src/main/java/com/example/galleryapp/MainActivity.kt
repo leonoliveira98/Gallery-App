@@ -13,6 +13,9 @@ import retrofit2.Call
 
 class MainActivity : AppCompatActivity() {
 
+    lateinit var photoId: String
+    lateinit var photoLabel: String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -29,22 +32,47 @@ class MainActivity : AppCompatActivity() {
         requestCall.enqueue(object : Callback<SearchPhotosResponse>{
 
             override fun onResponse(call: Call<SearchPhotosResponse>, response: Response<SearchPhotosResponse>) {
-                Log.d("Response", "onResponse: ${response.body()}")
+//                Log.d("Response", "onResponse: ${response.body()}")
                 if (response.isSuccessful){
                     val photoList  = response.body()!!
                     Log.d("Response", "photoList size : ${photoList.photosListInfo.photo.size}")
 
-                    recycler_view_images.apply {
-                        setHasFixedSize(true)
-                        layoutManager = GridLayoutManager(this@MainActivity,2)
-                        adapter = ImagesAdapter(photoList.photosListInfo.photo)
+                    // BEGINNING of FOR
+                    for (x in photoList.photosListInfo.photo){
+                        photoId = x.id
+//                        Log.d("Response3", "$photoId")  //Imprime os ID's todos
+
+                        val destinationService  = ServiceBuilder.buildService(ApiService::class.java)
+                        val requestCall = destinationService.getSizesList("$photoId")
+
+                        requestCall.enqueue(object : Callback<GetSizesResponse>{
+
+                            override fun onResponse(call: Call<GetSizesResponse>, response: Response<GetSizesResponse>) {
+//                                Log.d("Response", "onResponse: ${response.body()}")
+                                if (response.isSuccessful) {
+                                    val photoList = response.body()!!
+//                                    Log.d("Response","photoList size : ${photoList.sizes.size.size}\n")
+
+
+
+                                    recycler_view_images.apply {
+                                        setHasFixedSize(true)
+                                        layoutManager = GridLayoutManager(this@MainActivity, 2)
+                                        adapter = ImagesAdapter(photoList.sizes.size)
+                                    }
+
+                                } else {
+                                    Toast.makeText(this@MainActivity, "BENFICA", Toast.LENGTH_LONG).show()
+                                }
+                            } // END OF OnResponse
+                            override fun onFailure(call: Call<GetSizesResponse>, t: Throwable) {
+
+                                Toast.makeText(this@MainActivity, "Somathin wrong $t", Toast.LENGTH_LONG).show()
+                            }
+                        })
+                        //END OF ENQUEUE
                     }
-
-                    // DEPOIS DAQUI METER O SEGUDO PEDIDO COM O ID
-
-                    val destinationService2  = ServiceBuilder.buildService(ApiService::class.java)
-                    val requestCall2 = destinationService.getSizesList("51687102815") // Id exemplo
-
+                    // END OF FOR
                 }else{
                         Toast.makeText(this@MainActivity, "BENFICA",Toast.LENGTH_LONG).show()
                 }

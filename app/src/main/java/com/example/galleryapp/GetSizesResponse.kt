@@ -9,13 +9,14 @@ data class GetSizesResponse(
         val canblog: Int,
         val candownload: Int,
         val canprint: Int,
-        val size: List<Size>
+        val size: List<Url>
 
     ) {
-        data class Size(
-            val url: String,
+        data class Url(
+            val source: String,
             val height: Int,
-            val width: Int
+            val width: Int,
+            val label: String
 
         )
     }

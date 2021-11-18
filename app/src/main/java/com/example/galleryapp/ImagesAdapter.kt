@@ -1,5 +1,4 @@
 package com.example.galleryapp
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,9 +6,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide
-import kotlinx.android.synthetic.main.item_images.view.*
 
-class ImagesAdapter(private val searchPhotosResponseList: List<SearchPhotosResponse.PhotosInfo.Photo>) : RecyclerView.Adapter<ImagesAdapter.ImagesViewHolder>() {
+class ImagesAdapter(private val searchPhotosResponseList: List<GetSizesResponse.Sizes.Url>) : RecyclerView.Adapter<ImagesAdapter.ImagesViewHolder>() {
 
     //  total count of items in the list
     override fun getItemCount() = searchPhotosResponseList.size
@@ -36,12 +34,17 @@ class ImagesAdapter(private val searchPhotosResponseList: List<SearchPhotosRespo
         var tvView = itemView.findViewById<TextView>(R.id.text_view_car)
 
 
-        fun bind(photo: SearchPhotosResponse.PhotosInfo.Photo) {
+        fun bind(photo: GetSizesResponse.Sizes.Url) {
 
-            tvView.text = photo.id
-            Glide.with(itemView)
-                .load(R.drawable.car)
-                .into(image)
+
+//            if(photo.label == "Square"){
+
+                tvView.text = photo.label
+                Glide.with(itemView)
+                    .load(photo.source)
+                    .into(image)
+//            }
+
 
 
         }
