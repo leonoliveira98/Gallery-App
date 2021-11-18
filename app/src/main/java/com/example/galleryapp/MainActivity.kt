@@ -14,7 +14,7 @@ import retrofit2.Call
 class MainActivity : AppCompatActivity() {
 
     lateinit var photoId: String
-    lateinit var photoLabel: String
+    lateinit var photoInformation : PhotoInformation
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,11 +39,13 @@ class MainActivity : AppCompatActivity() {
 
                     // BEGINNING of FOR
                     for (x in photoList.photosListInfo.photo){
+                        // For each ID does:
                         photoId = x.id
-//                        Log.d("Response3", "$photoId")  //Imprime os ID's todos
+
+//                        Log.d("Response3", "$photoId")  // Imprime os ID's todos
 
                         val destinationService  = ServiceBuilder.buildService(ApiService::class.java)
-                        val requestCall = destinationService.getSizesList("$photoId")
+                        val requestCall = destinationService.getSizesList(photoId)
 
                         requestCall.enqueue(object : Callback<GetSizesResponse>{
 
@@ -52,16 +54,19 @@ class MainActivity : AppCompatActivity() {
                                 if (response.isSuccessful) {
                                     val photoList = response.body()!!
 
-                                    // Isto tinha de ser 100
-                                    // O tamanho ta a ser basicamente todas as labels que cada imagem tem
-                                    Log.d("Response","photoList size images : ${photoList.sizes.size}\n")
-                                    Log.d("Response","photoList content : ${photoList.sizes.size}\n")
+                                    // Para cada imagem, mostra para cada label os tamanhos e urls
+                                    for (i in photoList.sizes.size){
+//                                        Log.d("Resposta ", "onResponse: ${photoList.sizes.size}")
 
-
-                                    recycler_view_images.apply {
-                                        setHasFixedSize(true)
-                                        layoutManager = GridLayoutManager(this@MainActivity, 2)
-                                        adapter = ImagesAdapter(photoList.sizes.size)
+                                        if(i.label == "Square" || i.label == "Large Square"){
+                                            photoInformation = PhotoInformation(
+                                                photoId,
+                                                i.label,
+                                                i.source,
+                                                i.height.toString(),
+                                                i.width.toString()
+                                                )
+                                        }
                                     }
 
                                 } else {
@@ -76,6 +81,11 @@ class MainActivity : AppCompatActivity() {
                         //END OF ENQUEUE
                     }
                     // END OF FOR
+//                    recycler_view_images.apply {
+//                        setHasFixedSize(true)
+//                        layoutManager = GridLayoutManager(this@MainActivity, 2)
+//                        adapter = ImagesAdapter(photoInformation)
+//                    }
                 }else{
                         Toast.makeText(this@MainActivity, "BENFICA",Toast.LENGTH_LONG).show()
                 }

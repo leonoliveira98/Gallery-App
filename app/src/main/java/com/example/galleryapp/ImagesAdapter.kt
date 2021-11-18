@@ -36,7 +36,6 @@ class ImagesAdapter(private val searchPhotosResponseList: List<GetSizesResponse.
 
         fun bind(photo: GetSizesResponse.Sizes.Url) {
 
-
 //            if(photo.label == "Square"){
 
                 tvView.text = photo.label
