@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity() {
 //                Log.d("Response", "onResponse: ${response.body()}")
                 if (response.isSuccessful){
                     val photoList  = response.body()!!
-                    Log.d("Response", "photoList size : ${photoList.photosListInfo.photo.size}")
+                    Log.d("Response", "photoList size IDS : ${photoList.photosListInfo.photo.size}")
 
                     // BEGINNING of FOR
                     for (x in photoList.photosListInfo.photo){
@@ -51,8 +51,11 @@ class MainActivity : AppCompatActivity() {
 //                                Log.d("Response", "onResponse: ${response.body()}")
                                 if (response.isSuccessful) {
                                     val photoList = response.body()!!
-//                                    Log.d("Response","photoList size : ${photoList.sizes.size.size}\n")
 
+                                    // Isto tinha de ser 100
+                                    // O tamanho ta a ser basicamente todas as labels que cada imagem tem
+                                    Log.d("Response","photoList size images : ${photoList.sizes.size}\n")
+                                    Log.d("Response","photoList content : ${photoList.sizes.size}\n")
 
 
                                     recycler_view_images.apply {

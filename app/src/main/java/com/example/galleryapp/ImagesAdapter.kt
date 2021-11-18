@@ -1,4 +1,5 @@
 package com.example.galleryapp
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,7 +30,6 @@ class ImagesAdapter(private val searchPhotosResponseList: List<GetSizesResponse.
 
 
     class ImagesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
-
         var image : ImageView = itemView.findViewById(R.id.image_view)
         var tvView = itemView.findViewById<TextView>(R.id.text_view_car)
 
