@@ -13,8 +13,8 @@ import retrofit2.Call
 
 class MainActivity : AppCompatActivity() {
 
-    lateinit var photoId: String
-    lateinit var photoInformation : PhotoInformation
+    val photoInfo : PhotoInformation = PhotoInformation(listOf())
+    val photoLargeInfo : PhotoInformation? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,9 +40,9 @@ class MainActivity : AppCompatActivity() {
                     // BEGINNING of FOR
                     for (x in photoList.photosListInfo.photo){
                         // For each ID does:
-                        photoId = x.id
-
-//                        Log.d("Response3", "$photoId")  // Imprime os ID's todos
+                        val photoId = x.id
+                        // Imprime os ID's todos
+                        Log.d("Resposta", "ID Antes da chamada: ${photoId}")
 
                         val destinationService  = ServiceBuilder.buildService(ApiService::class.java)
                         val requestCall = destinationService.getSizesList(photoId)
@@ -53,22 +53,18 @@ class MainActivity : AppCompatActivity() {
 //                                Log.d("Response", "onResponse: ${response.body()}")
                                 if (response.isSuccessful) {
                                     val photoList = response.body()!!
-
                                     // Para cada imagem, mostra para cada label os tamanhos e urls
+                                    val bla = PhotoInformation.SourcePhoto("","", "", "", "","",
+                                        "","","","")
                                     for (i in photoList.sizes.size){
-//                                        Log.d("Resposta ", "onResponse: ${photoList.sizes.size}")
-
-                                        if(i.label == "Square" || i.label == "Large Square"){
-                                            photoInformation = PhotoInformation(
-                                                photoId,
-                                                i.label,
-                                                i.source,
-                                                i.height.toString(),
-                                                i.width.toString()
-                                                )
+                                        if(i.label == "Square" ){
+                                            bla.labelSquare = i.label
+                                            Log.d("Resposta ", "id dps da chamada: $photoId -- $photoList ")
                                         }
-                                    }
 
+//                                        photoInfo.info.add(bla)  -> METER UM TIPO DE LISTA QUE ACEITA ISTO.
+                                        // OBJETIVO É METER OS DOIS TIPOS DE TAMANHOS NO MESMO OBJETO E SO CHAMAR AS COISAS Q PRECISO.
+                                    }
                                 } else {
                                     Toast.makeText(this@MainActivity, "BENFICA", Toast.LENGTH_LONG).show()
                                 }
@@ -84,7 +80,7 @@ class MainActivity : AppCompatActivity() {
 //                    recycler_view_images.apply {
 //                        setHasFixedSize(true)
 //                        layoutManager = GridLayoutManager(this@MainActivity, 2)
-//                        adapter = ImagesAdapter(photoInformation)
+//                        adapter = ImagesAdapter(photoInfo)
 //                    }
                 }else{
                         Toast.makeText(this@MainActivity, "BENFICA",Toast.LENGTH_LONG).show()

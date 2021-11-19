@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide
 
-class ImagesAdapter(private val searchPhotosResponseList: List<GetSizesResponse.Sizes.Url>) : RecyclerView.Adapter<ImagesAdapter.ImagesViewHolder>() {
+class ImagesAdapter(private val searchPhotosResponseList: List<PhotoInformation.SourcePhoto>) : RecyclerView.Adapter<ImagesAdapter.ImagesViewHolder>() {
 
     //  total count of items in the list
     override fun getItemCount() = searchPhotosResponseList.size
@@ -34,13 +34,13 @@ class ImagesAdapter(private val searchPhotosResponseList: List<GetSizesResponse.
         var tvView = itemView.findViewById<TextView>(R.id.text_view_car)
 
 
-        fun bind(photo: GetSizesResponse.Sizes.Url) {
+        fun bind(photo: PhotoInformation.SourcePhoto) {
 
 //            if(photo.label == "Square"){
 
-                tvView.text = photo.label
+                tvView.text = photo.labelSquare
                 Glide.with(itemView)
-                    .load(photo.source)
+                    .load(photo.sourceSquare)
                     .into(image)
 //            }
 
