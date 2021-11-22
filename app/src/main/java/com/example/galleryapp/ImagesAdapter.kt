@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide
 
@@ -31,20 +32,12 @@ class ImagesAdapter(private val searchPhotosResponseList: List<PhotoInformation.
 
     class ImagesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         var image : ImageView = itemView.findViewById(R.id.image_view)
-        var tvView = itemView.findViewById<TextView>(R.id.text_view_car)
-
 
         fun bind(photo: PhotoInformation.SourcePhoto) {
 
-//            if(photo.label == "Square"){
-
-                tvView.text = photo.labelSquare
                 Glide.with(itemView)
                     .load(photo.sourceSquare)
                     .into(image)
-//            }
-
-
 
         }
     }

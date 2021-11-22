@@ -12,9 +12,8 @@ import retrofit2.Response
 import retrofit2.Call
 
 class MainActivity : AppCompatActivity() {
-
     val photoInfo : PhotoInformation = PhotoInformation(listOf())
-    val photoLargeInfo : PhotoInformation? = null
+    var  a : String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +41,7 @@ class MainActivity : AppCompatActivity() {
                         // For each ID does:
                         val photoId = x.id
                         // Imprime os ID's todos
-                        Log.d("Resposta", "ID Antes da chamada: ${photoId}")
+//                        Log.d("Resposta", "ID Antes da chamada: ${photoId}")
 
                         val destinationService  = ServiceBuilder.buildService(ApiService::class.java)
                         val requestCall = destinationService.getSizesList(photoId)
@@ -52,22 +51,40 @@ class MainActivity : AppCompatActivity() {
                             override fun onResponse(call: Call<GetSizesResponse>, response: Response<GetSizesResponse>) {
 //                                Log.d("Response", "onResponse: ${response.body()}")
                                 if (response.isSuccessful) {
-                                    val photoList = response.body()!!
-                                    // Para cada imagem, mostra para cada label os tamanhos e urls
-                                    val bla = PhotoInformation.SourcePhoto("","", "", "", "","",
-                                        "","","","")
-                                    for (i in photoList.sizes.size){
-                                        if(i.label == "Square" ){
-                                            bla.labelSquare = i.label
-                                            Log.d("Resposta ", "id dps da chamada: $photoId -- $photoList ")
-                                        }
 
-//                                        photoInfo.info.add(bla)  -> METER UM TIPO DE LISTA QUE ACEITA ISTO.
-                                        // OBJETIVO É METER OS DOIS TIPOS DE TAMANHOS NO MESMO OBJETO E SO CHAMAR AS COISAS Q PRECISO.
+                                    val photoList = response.body()!!
+                                    // Para cada imagem, mostra cada label os tamanhos e urls
+                                    val photoObj = PhotoInformation.SourcePhoto("","", "", "", "","",
+                                        "","")
+                                    for (i in photoList.sizes.size){
+//                                        Log.d("Resposta ", "${i} ")
+                                        if(i.label == "Large Square"){
+                                            photoObj.labelSquare = i.label
+                                            photoObj.sourceSquare = i.source
+                                            photoObj.heightSquare = i.height.toString()
+                                            photoObj.widthSquare = i.width.toString()
+
+                                        } else if (i.label == "Large"){
+                                            photoObj.labelLarge = i.label
+                                            photoObj.sourceLarge = i.source
+                                            photoObj.heightLarge = i.height.toString()
+                                            photoObj.widthLarge = i.width.toString()
+                                        }
+//                                        Log.d("Resposta ", "${photoObj} ") //-> Funciona, imprime so o large e square para cada id
+
                                     }
+                                    Log.d("Resposta ", "Fora Primeiro 'for' : ${photoInfo.info.size} ")
+                                    photoInfo.info += photoObj
+                                    recycler_view_images.apply {
+                                        setHasFixedSize(true)
+                                        layoutManager = GridLayoutManager(this@MainActivity, 2)
+                                        adapter = ImagesAdapter(photoInfo.info)
+                                    }
+
                                 } else {
                                     Toast.makeText(this@MainActivity, "BENFICA", Toast.LENGTH_LONG).show()
                                 }
+
                             } // END OF OnResponse
                             override fun onFailure(call: Call<GetSizesResponse>, t: Throwable) {
 
@@ -77,14 +94,11 @@ class MainActivity : AppCompatActivity() {
                         //END OF ENQUEUE
                     }
                     // END OF FOR
-//                    recycler_view_images.apply {
-//                        setHasFixedSize(true)
-//                        layoutManager = GridLayoutManager(this@MainActivity, 2)
-//                        adapter = ImagesAdapter(photoInfo)
-//                    }
+
                 }else{
                         Toast.makeText(this@MainActivity, "BENFICA",Toast.LENGTH_LONG).show()
                 }
+
             }
             override fun onFailure(call: Call<SearchPhotosResponse>, t: Throwable) {
 
