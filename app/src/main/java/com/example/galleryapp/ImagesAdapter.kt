@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 
 class ImagesAdapter(private val searchPhotosResponseList: List<PhotoInformation.SourcePhoto>) : RecyclerView.Adapter<ImagesAdapter.ImagesViewHolder>() {
 
@@ -37,6 +38,8 @@ class ImagesAdapter(private val searchPhotosResponseList: List<PhotoInformation.
 
                 Glide.with(itemView)
                     .load(photo.sourceSquare)
+                    .placeholder(R.drawable.loading)
+                    .error(R.drawable.error)
                     .into(image)
 
         }

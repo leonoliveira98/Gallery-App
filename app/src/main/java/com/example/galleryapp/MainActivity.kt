@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity() {
     private fun loadPhotos() {
         //initiate the service
         val destinationService  = ServiceBuilder.buildService(ApiService::class.java)
-        val requestCall = destinationService.getPhotoList("Paisagem", 2)
+        val requestCall = destinationService.getPhotoList("Paisagem", 1)
         //make network call asynchronously
         requestCall.enqueue(object : Callback<SearchPhotosResponse>{
 
@@ -56,7 +56,7 @@ class MainActivity : AppCompatActivity() {
                                     val photoObj = PhotoInformation.SourcePhoto("","", "", "", "","",
                                         "","")
                                     for (i in photoList.sizes.size){
-//                                        Log.d("Resposta ", "${i} ")
+                                        Log.d("Resposta ", "${i} ")
                                         if(i.label == "Large Square"){
                                             photoObj.labelSquare = i.label
                                             photoObj.sourceSquare = i.source
@@ -70,7 +70,6 @@ class MainActivity : AppCompatActivity() {
                                             photoObj.widthLarge = i.width.toString()
                                         }
 //                                        Log.d("Resposta ", "${photoObj} ") //-> Funciona, imprime so o large e square para cada id
-
                                     }
 
                                     Log.d("Resposta ", "Fora Primeiro 'for' : ${photoInfo.info.size} ")

@@ -8,6 +8,5 @@
     app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
     tools:listitem="@layout/item_images"
 android:layout_margin="4dp"
-
     />
 
