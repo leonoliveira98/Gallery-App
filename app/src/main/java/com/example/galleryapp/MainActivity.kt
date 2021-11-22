@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity() {
     private fun loadPhotos() {
         //initiate the service
         val destinationService  = ServiceBuilder.buildService(ApiService::class.java)
-        val requestCall = destinationService.getPhotoList("Paisagem", 1)
+        val requestCall = destinationService.getPhotoList("Paisagem", 2)
         //make network call asynchronously
         requestCall.enqueue(object : Callback<SearchPhotosResponse>{
 
@@ -47,7 +47,6 @@ class MainActivity : AppCompatActivity() {
                         val requestCall = destinationService.getSizesList(photoId)
 
                         requestCall.enqueue(object : Callback<GetSizesResponse>{
-
                             override fun onResponse(call: Call<GetSizesResponse>, response: Response<GetSizesResponse>) {
 //                                Log.d("Response", "onResponse: ${response.body()}")
                                 if (response.isSuccessful) {
@@ -73,6 +72,7 @@ class MainActivity : AppCompatActivity() {
 //                                        Log.d("Resposta ", "${photoObj} ") //-> Funciona, imprime so o large e square para cada id
 
                                     }
+
                                     Log.d("Resposta ", "Fora Primeiro 'for' : ${photoInfo.info.size} ")
                                     photoInfo.info += photoObj
                                     recycler_view_images.apply {
@@ -85,7 +85,8 @@ class MainActivity : AppCompatActivity() {
                                     Toast.makeText(this@MainActivity, "BENFICA", Toast.LENGTH_LONG).show()
                                 }
 
-                            } // END OF OnResponse
+                            }
+                            // END OF OnResponse
                             override fun onFailure(call: Call<GetSizesResponse>, t: Throwable) {
 
                                 Toast.makeText(this@MainActivity, "Somathin wrong $t", Toast.LENGTH_LONG).show()
