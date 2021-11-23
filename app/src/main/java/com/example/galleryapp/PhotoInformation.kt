@@ -1,5 +1,7 @@
 package com.example.galleryapp
 
+import java.io.Serializable
+
 data class PhotoInformation (
     var info: List<SourcePhoto>,
 
@@ -14,6 +16,6 @@ data class PhotoInformation (
         var sourceLarge : String,
         var heightLarge : String,
         var widthLarge : String
-    )
+    ) : Serializable
 }
 

@@ -5,9 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide
@@ -39,23 +41,20 @@ class ImagesAdapter(private val searchPhotosResponseList: List<PhotoInformation.
 
         fun bind(photo: PhotoInformation.SourcePhoto) {
 
-                Glide.with(itemView)
-                    .load(photo.sourceSquare)
+            Glide.with(itemView)
+                    .load(photo.sourceLarge)
                     .placeholder(R.drawable.loading)
                     .error(R.drawable.error)
                     .into(image)
 
-                itemView.setOnClickListener {
+            itemView.setOnClickListener {
 
-                    Toast.makeText(itemView.context, photo.sourceLarge,Toast.LENGTH_SHORT).show()
+                // *** To go to another activity!!! ***
+                val intent = Intent(itemView.context, DetailsActivity::class.java)
+                intent.putExtra("Photo", photo)
+                itemView.context.startActivity(intent)
 
-                    // *** To go to another activity!!! ***
-                    // Passa de activity mas quando faço a seta para trás, ele apaga as imagens todas e volta a fazer os pedidos
-                    val intent = Intent(itemView.context, DetailsActivity::class.java)
-//                    intent.putExtra("Message", "de")
-                    itemView.context.startActivity(intent)
-
-                }
+            }
         }
 
     }
