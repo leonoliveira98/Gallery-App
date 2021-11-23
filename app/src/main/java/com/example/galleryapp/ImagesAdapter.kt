@@ -46,22 +46,16 @@ class ImagesAdapter(private val searchPhotosResponseList: List<PhotoInformation.
                     .into(image)
 
                 itemView.setOnClickListener {
-                    Toast.makeText(itemView.context,"Ola",Toast.LENGTH_SHORT).show()
+
+                    Toast.makeText(itemView.context, photo.sourceLarge,Toast.LENGTH_SHORT).show()
+
+                    // *** To go to another activity!!! ***
+                    // Passa de activity mas quando faço a seta para trás, ele apaga as imagens todas e volta a fazer os pedidos
+                    val intent = Intent(itemView.context, DetailsActivity::class.java)
+//                    intent.putExtra("Message", "de")
+                    itemView.context.startActivity(intent)
+
                 }
-        }
-
-        // Fun go to Details Activity
-        fun goToDetails(){
-
-            itemView.setOnClickListener {
-                Toast.makeText(itemView.context,"Ola",Toast.LENGTH_LONG).show()
-            }
-
-            // *** To go to another activity!!! ***
-//            val previewActivityIntent = Intent(itemView, DetailsActivity::class.java)
-    //        previewActivityIntent.putExtra("Message", message)
-
-//            startActivity(previewActivityIntent)
         }
 
     }
