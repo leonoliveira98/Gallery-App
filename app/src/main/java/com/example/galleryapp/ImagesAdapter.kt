@@ -1,11 +1,14 @@
 package com.example.galleryapp
+import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
@@ -42,7 +45,25 @@ class ImagesAdapter(private val searchPhotosResponseList: List<PhotoInformation.
                     .error(R.drawable.error)
                     .into(image)
 
+                itemView.setOnClickListener {
+                    Toast.makeText(itemView.context,"Ola",Toast.LENGTH_SHORT).show()
+                }
         }
+
+        // Fun go to Details Activity
+        fun goToDetails(){
+
+            itemView.setOnClickListener {
+                Toast.makeText(itemView.context,"Ola",Toast.LENGTH_LONG).show()
+            }
+
+            // *** To go to another activity!!! ***
+//            val previewActivityIntent = Intent(itemView, DetailsActivity::class.java)
+    //        previewActivityIntent.putExtra("Message", message)
+
+//            startActivity(previewActivityIntent)
+        }
+
     }
 
 }

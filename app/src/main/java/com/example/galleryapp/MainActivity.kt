@@ -2,6 +2,7 @@ package com.example.galleryapp
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
@@ -20,6 +21,12 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         loadPhotos()
+        recyclerClick()
+
+    }
+
+    private fun recyclerClick() {
+
 
     }
 
@@ -29,20 +36,17 @@ class MainActivity : AppCompatActivity() {
         val requestCall = destinationService.getPhotoList("Paisagem", 1)
         //make network call asynchronously
         requestCall.enqueue(object : Callback<SearchPhotosResponse>{
-
             override fun onResponse(call: Call<SearchPhotosResponse>, response: Response<SearchPhotosResponse>) {
 //                Log.d("Response", "onResponse: ${response.body()}")
                 if (response.isSuccessful){
                     val photoList  = response.body()!!
                     Log.d("Response", "photoList size IDS : ${photoList.photosListInfo.photo.size}")
-
                     // BEGINNING of FOR
                     for (x in photoList.photosListInfo.photo){
                         // For each ID does:
                         val photoId = x.id
                         // Imprime os ID's todos
 //                        Log.d("Resposta", "ID Antes da chamada: ${photoId}")
-
                         val destinationService  = ServiceBuilder.buildService(ApiService::class.java)
                         val requestCall = destinationService.getSizesList(photoId)
 
@@ -50,7 +54,6 @@ class MainActivity : AppCompatActivity() {
                             override fun onResponse(call: Call<GetSizesResponse>, response: Response<GetSizesResponse>) {
 //                                Log.d("Response", "onResponse: ${response.body()}")
                                 if (response.isSuccessful) {
-
                                     val photoList = response.body()!!
                                     // Para cada imagem, mostra cada label os tamanhos e urls
                                     val photoObj = PhotoInformation.SourcePhoto("","", "", "", "","",
@@ -94,7 +97,6 @@ class MainActivity : AppCompatActivity() {
                         //END OF ENQUEUE
                     }
                     // END OF FOR
-
                 }else{
                         Toast.makeText(this@MainActivity, "BENFICA",Toast.LENGTH_LONG).show()
                 }
