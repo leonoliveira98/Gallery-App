@@ -40,25 +40,19 @@ class MainActivity : AppCompatActivity() {
                     for (x in photoList.photosListInfo.photo){
                         // For each ID does:
                         val photoId = x.id
-
                         // Para inicializar a recyclerView com os tamanhos
                         val photoObj = PhotoInformation.SourcePhoto("","", "", "", "","",
                             "","","")
                         photoObj.id = photoId
                         photoInfo.info += photoObj
-
-                        recycler_view_images.apply {
-                            setHasFixedSize(true)
-                            layoutManager = GridLayoutManager(this@MainActivity, 2)
-                            adapter = ImagesAdapter(photoInfo.info)
-                        }
+                        // Aqui estou a guardar os objetos na minha class (consigo ir mostrar os valores -> [x])
 
                         val destinationService  = ServiceBuilder.buildService(ApiService::class.java)
                         val requestCall = destinationService.getSizesList(photoId)
 
                         requestCall.enqueue(object : Callback<GetSizesResponse>{
                             override fun onResponse(call: Call<GetSizesResponse>, response: Response<GetSizesResponse>) {
-                                Log.d("Response", "photoInfo size: ${photoInfo.info.size}") // -> Imprime sempre 100
+                                Log.d("Response", "photoInfo size: ${photoInfo.info.size}") // -> Imprime sempre 100, Tamanho do photoInfo = 100
 
                                 if (response.isSuccessful) {
                                     val photoList = response.body()!!
@@ -85,6 +79,7 @@ class MainActivity : AppCompatActivity() {
                                     }
 
                                     // Se tiver os dois tamanhos ele entra aqui e manda para o adapter
+                                    // Neste momento tem uma imagem de erro caso apareça uma imagem sem um dos tamanhos
                                     if(a == 2){
                                         recycler_view_images.apply {
                                             setHasFixedSize(true)
