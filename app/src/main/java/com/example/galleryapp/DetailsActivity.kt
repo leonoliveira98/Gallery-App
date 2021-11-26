@@ -21,7 +21,7 @@ class DetailsActivity : AppCompatActivity() {
         Glide.with(this)
             .load(photo.sourceLarge)
             .placeholder(R.drawable.loading)
-            .error(R.drawable.error)
+            .error(R.drawable.placeholder)
             .into(image_view_large)
 
     }

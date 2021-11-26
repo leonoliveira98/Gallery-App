@@ -7,6 +7,7 @@ data class PhotoInformation (
 
 ) {
     data class SourcePhoto(
+        var id: String,
         var labelSquare : String,
         var sourceSquare : String,
         var heightSquare : String,

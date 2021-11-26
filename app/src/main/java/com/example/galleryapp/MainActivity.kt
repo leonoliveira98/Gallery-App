@@ -13,8 +13,9 @@ import retrofit2.Response
 import retrofit2.Call
 
 class MainActivity : AppCompatActivity() {
+
     val photoInfo : PhotoInformation = PhotoInformation(listOf())
-    var  a : String = ""
+    var a : Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,47 +35,62 @@ class MainActivity : AppCompatActivity() {
 //                Log.d("Response", "onResponse: ${response.body()}")
                 if (response.isSuccessful){
                     val photoList  = response.body()!!
-                    Log.d("Response", "photoList size IDS : ${photoList.photosListInfo.photo.size}")
+                    Log.d("Response", "photoList size IDS : ${photoList.photosListInfo.photo.size}") // -> Imprime sempre 100
                     // BEGINNING of FOR
                     for (x in photoList.photosListInfo.photo){
                         // For each ID does:
                         val photoId = x.id
-                        // Imprime os ID's todos
-//                        Log.d("Resposta", "ID Antes da chamada: ${photoId}")
+
+                        // Para inicializar a recyclerView com os tamanhos
+                        val photoObj = PhotoInformation.SourcePhoto("","", "", "", "","",
+                            "","","")
+                        photoObj.id = photoId
+                        photoInfo.info += photoObj
+
+                        recycler_view_images.apply {
+                            setHasFixedSize(true)
+                            layoutManager = GridLayoutManager(this@MainActivity, 2)
+                            adapter = ImagesAdapter(photoInfo.info)
+                        }
+
                         val destinationService  = ServiceBuilder.buildService(ApiService::class.java)
                         val requestCall = destinationService.getSizesList(photoId)
 
                         requestCall.enqueue(object : Callback<GetSizesResponse>{
                             override fun onResponse(call: Call<GetSizesResponse>, response: Response<GetSizesResponse>) {
-//                                Log.d("Response", "onResponse: ${response.body()}")
+                                Log.d("Response", "photoInfo size: ${photoInfo.info.size}") // -> Imprime sempre 100
+
                                 if (response.isSuccessful) {
                                     val photoList = response.body()!!
                                     // Para cada imagem, mostra cada label os tamanhos e urls
-                                    val photoObj = PhotoInformation.SourcePhoto("","", "", "", "","",
-                                        "","")
+                                    a = 0
+
                                     for (i in photoList.sizes.size){
-                                        Log.d("Resposta ", "${i} ")
+
                                         if(i.label == "Large Square"){
                                             photoObj.labelSquare = i.label
                                             photoObj.sourceSquare = i.source
                                             photoObj.heightSquare = i.height.toString()
                                             photoObj.widthSquare = i.width.toString()
+                                            a += 1
 
                                         } else if (i.label == "Large"){
                                             photoObj.labelLarge = i.label
                                             photoObj.sourceLarge = i.source
                                             photoObj.heightLarge = i.height.toString()
                                             photoObj.widthLarge = i.width.toString()
+                                            a += 1
+
                                         }
-//                                        Log.d("Resposta ", "${photoObj} ") //-> Funciona, imprime so o large e square para cada id
                                     }
 
-                                    Log.d("Resposta ", "Fora Primeiro 'for' : ${photoInfo.info.size} ")
-                                    photoInfo.info += photoObj
-                                    recycler_view_images.apply {
-                                        setHasFixedSize(true)
-                                        layoutManager = GridLayoutManager(this@MainActivity, 2)
-                                        adapter = ImagesAdapter(photoInfo.info)
+                                    // Se tiver os dois tamanhos ele entra aqui e manda para o adapter
+                                    if(a == 2){
+                                        recycler_view_images.apply {
+                                            setHasFixedSize(true)
+                                            layoutManager = GridLayoutManager(this@MainActivity, 2)
+                                            adapter = ImagesAdapter(photoInfo.info)
+                                        }
                                     }
 
                                 } else {

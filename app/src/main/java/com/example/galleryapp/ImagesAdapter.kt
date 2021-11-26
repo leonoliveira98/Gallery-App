@@ -32,6 +32,7 @@ class ImagesAdapter(private val searchPhotosResponseList: List<PhotoInformation.
     override fun onBindViewHolder(holder: ImagesViewHolder, position: Int) {
 
         // Set item views based on your views and data model
+//        notifyItemChanged(position)
        return holder.bind(searchPhotosResponseList[position])
     }
 
@@ -44,11 +45,10 @@ class ImagesAdapter(private val searchPhotosResponseList: List<PhotoInformation.
             Glide.with(itemView)
                     .load(photo.sourceLarge)
                     .placeholder(R.drawable.loading)
-                    .error(R.drawable.error)
+                    .error(R.drawable.placeholder)
                     .into(image)
 
             itemView.setOnClickListener {
-
                 // *** To go to another activity!!! ***
                 val intent = Intent(itemView.context, DetailsActivity::class.java)
                 intent.putExtra("Photo", photo)
