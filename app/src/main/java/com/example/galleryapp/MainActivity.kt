@@ -96,15 +96,14 @@ class MainActivity : AppCompatActivity() {
                                             layoutManager = GridLayoutManager(this@MainActivity, 2)
                                             adapter = adapter2
                                         }
-                                        Log.d("Respostas", "photoMUTABLE no A: ${photoObj}")
-                                        Log.d("Respostas", "photoMUTABLE no A: ${b}")
+//                                        Log.d("Respostas", "photoMUTABLE no A: ${photoObj}")
+//                                        Log.d("Respostas", "photoMUTABLE no A: ${b}")
                                         b+=1
                                     }
 
                                 } else {
                                     Toast.makeText(this@MainActivity, "BENFICA", Toast.LENGTH_LONG).show()
                                 }
-
                             }
                             // END OF OnResponse
                             override fun onFailure(call: Call<GetSizesResponse>, t: Throwable) {
