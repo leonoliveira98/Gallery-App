@@ -54,6 +54,7 @@ class ImagesAdapter(private val searchPhotosResponseList: List<PhotoInformation.
                 val intent = Intent(itemView.context, DetailsActivity::class.java)
                 intent.putExtra("Photo", photo)
                 itemView.context.startActivity(intent)
+                Toast.makeText(itemView.context,photo.id,Toast.LENGTH_LONG).show()
 
             }
 

@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
     private fun loadPhotos() {
         //initiate the service
         val destinationService  = ServiceBuilder.buildService(ApiService::class.java)
-        val requestCall = destinationService.getPhotoList("Paisagem", 1)
+        val requestCall = destinationService.getPhotoList("Paisagens", 1)
         //make network call asynchronously
         requestCall.enqueue(object : Callback<SearchPhotosResponse>{
             override fun onResponse(call: Call<SearchPhotosResponse>, response: Response<SearchPhotosResponse>) {
@@ -63,7 +63,6 @@ class MainActivity : AppCompatActivity() {
                                     val photoList = response.body()!!
                                     // Para cada imagem, mostra cada label os tamanhos e urls
                                     a = 0
-
                                     for (i in photoList.sizes.size){
 
                                         if(i.label == "Large Square"){
@@ -97,8 +96,8 @@ class MainActivity : AppCompatActivity() {
                                             layoutManager = GridLayoutManager(this@MainActivity, 2)
                                             adapter = adapter2
                                         }
-//                                        Log.d("Respostas", "photoMUTABLE no A: ${photoInfoMut}")
-//                                        Log.d("Respostas", "photoMUTABLE no A: ${b}")
+                                        Log.d("Respostas", "photoMUTABLE no A: ${photoObj}")
+                                        Log.d("Respostas", "photoMUTABLE no A: ${b}")
                                         b+=1
                                     }
 
