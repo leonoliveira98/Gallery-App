@@ -2,10 +2,12 @@ package com.example.galleryapp
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Parcelable
 import android.provider.MediaStore
 import android.util.Log
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
+import jp.wasabeef.recyclerview.animators.SlideInUpAnimator
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.item_images.*
 import retrofit2.Callback
@@ -14,12 +16,15 @@ import retrofit2.Call
 
 class MainActivity : AppCompatActivity() {
 
-    val photoInfo : PhotoInformation = PhotoInformation(listOf())
+    val photoInfoMut = mutableListOf<PhotoInformation.SourcePhoto>()
     var a : Int = 0
+    var b : Int = 0
+    lateinit var adapter2 : ImagesAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
 
         loadPhotos()
 
@@ -35,7 +40,7 @@ class MainActivity : AppCompatActivity() {
 //                Log.d("Response", "onResponse: ${response.body()}")
                 if (response.isSuccessful){
                     val photoList  = response.body()!!
-                    Log.d("Response", "photoList size IDS : ${photoList.photosListInfo.photo.size}") // -> Imprime sempre 100
+//                    Log.d("Response", "photoList size IDS : ${photoList.photosListInfo.photo.size}") // -> Imprime sempre 100
                     // BEGINNING of FOR
                     for (x in photoList.photosListInfo.photo){
                         // For each ID does:
@@ -44,16 +49,16 @@ class MainActivity : AppCompatActivity() {
                         val photoObj = PhotoInformation.SourcePhoto("","", "", "", "","",
                             "","","")
                         photoObj.id = photoId
-                        photoInfo.info += photoObj
-                        // Aqui estou a guardar os objetos na minha class (consigo ir mostrar os valores -> [x])
+                        photoInfoMut.add(photoObj)
+                        Log.d("Respostas", "photoMUTABLE no antes do For dos dados: ${photoInfoMut} \n")
+                        // Aqui estou a guardar os objetos na minha class (consigo mostrar os valores -> [x])
 
                         val destinationService  = ServiceBuilder.buildService(ApiService::class.java)
                         val requestCall = destinationService.getSizesList(photoId)
 
                         requestCall.enqueue(object : Callback<GetSizesResponse>{
                             override fun onResponse(call: Call<GetSizesResponse>, response: Response<GetSizesResponse>) {
-                                Log.d("Response", "photoInfo size: ${photoInfo.info.size}") // -> Imprime sempre 100, Tamanho do photoInfo = 100
-
+//                                Log.d("Response", "photoInfo size: ${photoInfo.info.size}") // -> Imprime sempre 100, Tamanho do photoInfo = 100
                                 if (response.isSuccessful) {
                                     val photoList = response.body()!!
                                     // Para cada imagem, mostra cada label os tamanhos e urls
@@ -77,15 +82,24 @@ class MainActivity : AppCompatActivity() {
 
                                         }
                                     }
-
                                     // Se tiver os dois tamanhos ele entra aqui e manda para o adapter
                                     // Neste momento tem uma imagem de erro caso apareça uma imagem sem um dos tamanhos
+                                    // Se descomentar este 'if' so imagens que tenham os dois tamanhos aparecem
+                                    // Assim como está as imagens que nao têm os dois tamanhos aparecem com um placeholder de erro
                                     if(a == 2){
+                                        photoInfoMut.set(b, photoObj)
+
+                                        adapter2 = ImagesAdapter(photoInfoMut)
+                                        adapter2.notifyItemChanged(b)
+
                                         recycler_view_images.apply {
                                             setHasFixedSize(true)
                                             layoutManager = GridLayoutManager(this@MainActivity, 2)
-                                            adapter = ImagesAdapter(photoInfo.info)
+                                            adapter = adapter2
                                         }
+//                                        Log.d("Respostas", "photoMUTABLE no A: ${photoInfoMut}")
+//                                        Log.d("Respostas", "photoMUTABLE no A: ${b}")
+                                        b+=1
                                     }
 
                                 } else {

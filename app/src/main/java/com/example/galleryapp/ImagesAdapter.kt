@@ -1,5 +1,6 @@
 package com.example.galleryapp
 import android.content.Intent
+import android.media.Image
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -32,9 +33,9 @@ class ImagesAdapter(private val searchPhotosResponseList: List<PhotoInformation.
     override fun onBindViewHolder(holder: ImagesViewHolder, position: Int) {
 
         // Set item views based on your views and data model
-//        notifyItemChanged(position)
-       return holder.bind(searchPhotosResponseList[position])
+        return holder.bind(searchPhotosResponseList[position])
     }
+
 
 
     class ImagesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
@@ -55,6 +56,7 @@ class ImagesAdapter(private val searchPhotosResponseList: List<PhotoInformation.
                 itemView.context.startActivity(intent)
 
             }
+
         }
 
     }
