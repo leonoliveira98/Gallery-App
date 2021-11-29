@@ -17,6 +17,7 @@ data class PhotoInformation (
         var sourceLarge : String,
         var heightLarge : String,
         var widthLarge : String
+
     ) : Serializable
 }
 
