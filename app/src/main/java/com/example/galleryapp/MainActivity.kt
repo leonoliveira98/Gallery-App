@@ -17,7 +17,6 @@ import retrofit2.Call
 class MainActivity : AppCompatActivity() {
 
     val photoInfoMut = mutableListOf<PhotoInformation.SourcePhoto>()
-    var a: Int = 0
     var b: Int = 0
     lateinit var adapter2: ImagesAdapter
 
@@ -55,7 +54,13 @@ class MainActivity : AppCompatActivity() {
                         )
                         photoObj.id = photoId
                         photoInfoMut.add(photoObj)
-                        Log.d("Respostas","photoMUTABLE antes: ${photoInfoMut.size}")
+                        adapter2 = ImagesAdapter(photoInfoMut)
+                        recycler_view_images.apply {
+                            setHasFixedSize(true)
+                            layoutManager = GridLayoutManager(this@MainActivity, 2)
+                            adapter = adapter2
+                        }
+
                         // Aqui estou a guardar os objetos na minha class (consigo mostrar os valores -> [x])
 
                         val destinationService = ServiceBuilder.buildService(ApiService::class.java)
@@ -70,14 +75,12 @@ class MainActivity : AppCompatActivity() {
                                 if (response.isSuccessful) {
                                     val photoList = response.body()!!
                                     // Para cada imagem, mostra cada label os tamanhos e urls
-                                    a = 0
                                     for (i in photoList.sizes.size) {
                                         if (i.label == "Large Square") {
                                             photoObj.labelSquare = i.label
                                             photoObj.sourceSquare = i.source
                                             photoObj.heightSquare = i.height.toString()
                                             photoObj.widthSquare = i.width.toString()
-                                            a += 1
 
                                         } else if (i.label == "Large") {
                                             photoObj.labelLarge = i.label
@@ -101,16 +104,8 @@ class MainActivity : AppCompatActivity() {
                                     }
                                     // Neste momento tem uma imagem de erro caso apareça uma imagem sem um dos tamanhos
                                     photoInfoMut.set(b, photoObj)
-//                                    Log.d("Respostas","photoMUTABLE no antes do For dos dados: ${photoInfoMut.set(b,photoObj)}")
-
-                                    adapter2 = ImagesAdapter(photoInfoMut)
+                                    // Para ir carregando enquanto se pode dar scroll
                                     adapter2.notifyItemChanged(b)
-
-                                    recycler_view_images.apply {
-                                        setHasFixedSize(true)
-                                        layoutManager = GridLayoutManager(this@MainActivity, 2)
-                                        adapter = adapter2
-                                    }
 
                                     Log.d("Respostas", "photoMUTABLE no A: ${b + 1}")
                                     b += 1
