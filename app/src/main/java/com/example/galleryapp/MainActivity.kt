@@ -39,7 +39,6 @@ class MainActivity : AppCompatActivity() {
                 call: Call<SearchPhotosResponse>,
                 response: Response<SearchPhotosResponse>
             ) {
-//                Log.d("Response", "onResponse: ${response.body()}")
                 if (response.isSuccessful) {
                     val photoList = response.body()!!
 //                    Log.d("Response", "photoList size IDS : ${photoList.photosListInfo.photo.size}") // -> Imprime sempre 100
