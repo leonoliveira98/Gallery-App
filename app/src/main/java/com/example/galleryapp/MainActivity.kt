@@ -5,8 +5,10 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.provider.MediaStore
 import android.util.Log
+import android.widget.AbsListView
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import jp.wasabeef.recyclerview.animators.SlideInUpAnimator
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.item_images.*
@@ -20,19 +22,39 @@ class MainActivity : AppCompatActivity() {
     var b: Int = 0
     lateinit var adapter2: ImagesAdapter
 
+    var page = 1
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
 
-        loadPhotos()
+
+        loadPhotos(page)
+
+        recycler_view_images.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+
+                if (!recyclerView.canScrollVertically(1)) {
+                    page += 1
+                    loadPhotos(page)
+                }
+            }
+        })
+
+
 
     }
 
-    private fun loadPhotos() {
+
+
+
+    private fun loadPhotos(page : Int) {
+
         //initiate the service
         val destinationService = ServiceBuilder.buildService(ApiService::class.java)
-        val requestCall = destinationService.getPhotoList("Paisagens", 1)
+        val requestCall = destinationService.getPhotoList("Paisagens", page)
         //make network call asynchronously
         requestCall.enqueue(object : Callback<SearchPhotosResponse> {
             override fun onResponse(
@@ -48,12 +70,13 @@ class MainActivity : AppCompatActivity() {
                         val photoId = x.id
                         // Para inicializar a recyclerView com os tamanhos
                         val photoObj = PhotoInformation.SourcePhoto(
-                            "", "", "", "", "", "",
+                            photoId, "", "", "", "", "",
                             "", "", ""
                         )
-                        photoObj.id = photoId
+
                         photoInfoMut.add(photoObj)
                         adapter2 = ImagesAdapter(photoInfoMut)
+                        adapter2.notifyItemInserted(b)
                         recycler_view_images.apply {
                             setHasFixedSize(true)
                             layoutManager = GridLayoutManager(this@MainActivity, 2)
@@ -131,4 +154,5 @@ class MainActivity : AppCompatActivity() {
             }
         })
     }
+
 }
