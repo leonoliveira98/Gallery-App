@@ -29,7 +29,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
 
-
         loadPhotos(page)
 
         recycler_view_images.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -44,11 +43,7 @@ class MainActivity : AppCompatActivity() {
         })
 
 
-
     }
-
-
-
 
     private fun loadPhotos(page : Int) {
 
